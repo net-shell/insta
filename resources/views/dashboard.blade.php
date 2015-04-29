@@ -25,26 +25,30 @@
 				<a class="button right" ng-click="create()">
 					<i class="fa fa-plus"></i>
 				</a>
-				<h2>{{ trans('servers.title') }}</h2>
+				<h2>{{ trans('server.title') }}</h2>
 			</div>
 			<accordion>
-				<accordion-group is-open="isopen" ng-repeat="server in servers">
+				<accordion-group is-open="server.selected" ng-repeat="server in servers" ng-class="{ 'disabled' : server.deleted_at }">
 					<accordion-heading>
-						<div ng-click="$root.selectedServer = !isopen ? server : null">
-							<i class="fa" ng-class="{ 'fa-circle': !server.deleted_at, 'fa-circle-o-notch': server.deleted_at }"></i>
+						<div ng-click="$root.selectedServer = !server.selected ? server : null">
+							<i class="fa" ng-class="{ 'fa-circle': !server.selected.deleted_at, 'fa-circle-o-notch': server.deleted_at }"></i>
 							@{{ server.name }}
-							<i class="right" ng-class="{'fa fa-chevron-down': isopen, 'fa fa-chevron-right': !isopen}"></i>
+							<i class="right" ng-class="{'fa fa-chevron-down': server.selected, 'fa fa-chevron-right': !server.selected}"></i>
 						</div>
 					</accordion-heading>
 					
 					<div class="row collapse" ng-if="server.deleted_at">
-						<div class="small-6 columns">
-							{{ trans('servers.disabled_info') }}
+						<div class="small-4 columns">
+							{{ trans('server.disabled_info') }}
 						</div>
-						<div class="small-6 columns">
-							<a class="button expand">
+						<div class="small-8 columns">
+							<a class="button expand" ng-click="enable(server)">
 								<i class="fa fa-power-off"></i>
-								{{ trans('servers.enable') }}
+								{{ trans('server.enable') }}
+							</a>
+							<a class="small button expand" ng-click="delete(server)">
+								<i class="fa fa-remove"></i>
+								{{ trans('server.delete') }}
 							</a>
 						</div>
 					</div>
@@ -58,8 +62,8 @@
 							<br /> CentOS 7 Bla bla bla
 						</div>
 						<div class="small-4 columns">
-							<a class="small button expand" ng-click="delete(server)">
-								<i class="fa fa-power-off"></i> {{ trans('servers.disable') }}
+							<a class="small button expand" ng-click="disable(server)">
+								<i class="fa fa-power-off"></i> {{ trans('server.disable') }}
 							</a>
 						</div>
 					</div>
@@ -68,19 +72,19 @@
 						<li>
 							<a class="small button" ng-click="details(server)">
 								<i class="fa fa-2x fa-server"></i>
-								<div>{{ trans('servers.system') }}</div>
+								<div>{{ trans('server.system') }}</div>
 							</a>
 						</li>
 						<li>
 							<a class="small button">
-								<i class="fa fa-2x fa-refresh"></i>
-								<div>{{ trans('servers.refresh') }}</div>
+								<i class="fa fa-2x fa-unlock-alt"></i>
+								<div>{{ trans('server.credentials') }}</div>
 							</a>
 						</li>
 						<li>
 							<a class="small button">
 								<i class="fa fa-2x fa-cog"></i>
-								<div>{{ trans('servers.settings') }}</div>
+								<div>{{ trans('server.settings') }}</div>
 							</a>
 						</li>
 					</ul>

@@ -7,12 +7,14 @@
 	<style>
 		body { font-family: 'Ubuntu', sans-serif; background: #f6f6f6; }
 		.button { background: #333; text-transform: uppercase; }
-		.accordion dd>a { padding: 0; margin-top: 2px; }
+		.accordion dd>a { padding: 0; margin-top: 3px; }
 		.accordion dd>a>div { padding: 1rem; }
+		.accordion dd.disabled>a, .accordion dd.disabled>a:hover { background: none; border: 2px solid #ccc; color: #999; }
 		.accordion dd>a, .accordion dd>a:hover { background: #ccc; opacity: 0.8; transition: opacity .3s; }
 		.accordion dd>a:hover { opacity: 1; }
 		.accordion a.active, .accordion a.active:hover { background: #111; color: #fff; }
 		.accordion .content { background: #aaa; }
+		.accordion dd.disabled .content { background: #ccc; }
 		
 		h1, h2, h3 { text-transform: uppercase; }
 		header { padding-top: 1rem; text-transform: uppercase; }

@@ -8,19 +8,21 @@ class ServersController extends Controller
 {
     public function index()
     {
-    	return Server::withTrashed()->orderBy('deleted_at', 'asc')->get();
+    	return Server::withTrashed()
+                ->orderBy('deleted_at', 'asc')
+                ->orderBy('name', 'asc')
+                ->get();
     }
 
     public function store(Request $request, Server $server)
     {
     	$input = $request->only(['name', 'host', 'port', 'user', 'password']);
     	
-    	if(!$input['name']) $errors[] = ['type' => 'alert', 'message' => 'Name is required'];
-    	if(!$input['host']) $errors[] = ['type' => 'alert', 'message' => 'Host is required'];
-    	if(!$input['user']) $errors[] = ['type' => 'alert', 'message' => 'User is required'];
+    	if(!$input['host']) $errors[] = ['type' => 'alert', 'message' => 'SSH Host is required'];
+    	if(!$input['user']) $errors[] = ['type' => 'alert', 'message' => 'SSH Login is required'];
 
     	if(!isset($errors)) {
-	 	$server->name = $input['name'];
+	 	$server->name = $input['name'] ? $input['name'] : $input['host'];
 	 	$server->credentials = json_encode(compact('host', 'port', 'user', 'password'));
 	 	$server->user_id = app('auth')->id();
 	    	$success = $server->save();
@@ -31,7 +33,19 @@ class ServersController extends Controller
 
     public function destroy($id)
     {
+        $success = Server::withTrashed()->find($id)->forceDelete();
+        return compact('success');
+    }
+
+    public function disable($id)
+    {
         $success = Server::find($id)->delete();
+        return compact('success');
+    }
+
+    public function enable($id)
+    {
+        $success = Server::onlyTrashed()->find($id)->restore();
         return compact('success');
     }
 

@@ -7,6 +7,11 @@ app.controller('ServerIndexController', function ($scope, $rootScope, Restangula
 
 	$scope.refresh = function() {
 		baseServers.getList().then(function(servers) {
+			for(var i=0; i<servers.length; i++) {
+				var selectedId = $rootScope.selectedServer ? $rootScope.selectedServer.id : 0
+				if(selectedId < 1) break;
+				servers[i].selected = servers[i].id == selectedId
+			}
 			$scope.servers = servers
 		})
 	}
@@ -19,9 +24,20 @@ app.controller('ServerIndexController', function ($scope, $rootScope, Restangula
 		}).result.then($scope.refresh)
 	}
 
+	$scope.enable = function(server) {
+		server.one('enable').get().then($scope.refresh)
+	}
+	
+	$scope.disable = function(server) {
+		if(confirm("Are you sure you want to disable " + server.name + "?")) {
+			server.remove().then($scope.refresh)
+		}
+	}
+
 	$scope.delete = function(server) {
 		if(confirm("Are you sure you want to delete " + server.name + "?")) {
-			server.remove().then($scope.refresh)
+			server.one('destroy').remove().then($scope.refresh)
+			delete $rootScope.selectedServer
 		}
 	}
 

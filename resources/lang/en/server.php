@@ -1,0 +1,17 @@
+<?php return [
+	'title' => 'My Servers',
+	'enable' => 'Enable',
+	'disable' => 'Disable',
+	'delete' => 'Delete',
+	'disabled_info' => 'This server has been disabled.',
+	'system' => 'System',
+	'credentials' => 'Auth',
+	'settings' => 'Settings',
+	'create' => 'Add server',
+	'name' => 'Server Name',
+	'host' => 'SSH Host',
+	'port' => 'SSH Port',
+	'user' => 'SSH Login',
+	'password' => 'SSH Password',
+	'test' => 'Test Connection',
+];
