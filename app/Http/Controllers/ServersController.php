@@ -28,7 +28,7 @@ class ServersController extends Controller
 	    	$success = $server->save();
 	    	if(!$success) $errors[] = ['type' => 'alert', 'message' => 'Server error'];
     	}
-    	return compact('success', 'errors', 'input');
+    	return compact('success', 'errors');
     }
 
     public function destroy($id)

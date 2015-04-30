@@ -17,25 +17,31 @@
 		.accordion dd.disabled .content { background: #ccc; }
 		
 		h1, h2, h3 { text-transform: uppercase; }
-		header { padding-top: 1rem; text-transform: uppercase; }
-		header, header a, header li, header i { color: #ccc; }
+		header { text-transform: uppercase; color: #999; }
+		header ul.inline-list { margin: 0; }
+		header a, header span { padding: 0 1rem; line-height: 3; }
+		header a { color: #ccc; }
+		header a.active { background: #f6f6f6; color: #000; }
 
 		.details { background: #fff; padding-bottom: 5rem; }
 	</style>
 	@yield('head')
 </head>
-<body>
+<body ng-app="insta">
 	<header style="background: #111;">
 		<div class="row">
 			<div class="small-6 columns">
 				<ul class="inline-list">
-					<li>insta</li>
-					<li><a href="#">Navigation</a></li>
+					<li><span>insta</span></li>
+					@yield('navigation')
 				</ul>
 			</div>
 			<div class="small-6 columns text-right">
 				@if(Auth::check())
-				{{ Auth::user()->email }}
+				<a href="/auth/logout">
+					{{ Auth::user()->email }}
+					({{ trans('app.logout') }})
+				</a>
 				@else
 				<a href="/auth/login">{{ trans('app.login') }}</a>
 				@endif

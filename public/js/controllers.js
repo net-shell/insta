@@ -1,6 +1,26 @@
-var app = angular.module('insta', ['restangular', 'mm.foundation', 'ngAnimate']);
+var app = angular.module('insta', ['restangular', 'mm.foundation', 'ui.router', 'ngAnimate']);
 
-app.controller('ServerIndexController', function ($scope, $rootScope, Restangular, $modal) {
+app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+
+	$urlRouterProvider.otherwise('/servers')
+	
+	$stateProvider
+		.state('servers', {
+			url: '/servers',
+			templateUrl: 'servers.html'
+		})
+		.state('operations', {
+			url: '/operations',
+			templateUrl: 'operations.html'
+		})
+		.state('logs', {
+			url: '/logs',
+			templateUrl: 'logs.html'
+		})
+})
+
+app.controller('ServersController', function ($scope, $rootScope, Restangular, $modal) {
+	console.log('hui')
 	// the quick & dirty way:
 	// $scope.servers = Restangular.all('servers').getList().$object;
 	var baseServers = Restangular.all('servers');
@@ -29,13 +49,13 @@ app.controller('ServerIndexController', function ($scope, $rootScope, Restangula
 	}
 	
 	$scope.disable = function(server) {
-		if(confirm("Are you sure you want to disable " + server.name + "?")) {
+		if(confirm('Are you sure you want to disable ' + server.name + '?')) {
 			server.remove().then($scope.refresh)
 		}
 	}
 
 	$scope.delete = function(server) {
-		if(confirm("Are you sure you want to delete " + server.name + "?")) {
+		if(confirm('Are you sure you want to delete ' + server.name + '?')) {
 			server.one('destroy').remove().then($scope.refresh)
 			delete $rootScope.selectedServer
 		}
@@ -69,8 +89,7 @@ app.controller('ServerCreateController', function ($scope, Restangular, $modalIn
 
 	$scope.server = { port: 22 }
 	
-	$scope.save = function(server) {
-	
+	$scope.save = function(server) {	
 		baseServers.post(server).then(function(response) {
 			$scope.alerts = response.errors
 			if(response.success) $modalInstance.close()
@@ -86,4 +105,16 @@ app.controller('ServerCreateController', function ($scope, Restangular, $modalIn
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1)
 	}
+})
+
+app.controller('JobsController', function ($scope, $rootScope, Restangular, $modal) {
+	
+	var api = Restangular.all('jobs');
+	
+	$scope.refresh = function() {
+		api.getList().then(function(jobs) {
+			$scope.jobs = jobs
+		})
+	}
+	$scope.refresh()
 })

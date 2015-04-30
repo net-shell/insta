@@ -15,7 +15,9 @@ $app->group(['namespace' => 'App\Http\Controllers', 'middleware' => 'auth'], fun
 
 	$app->get('auth/logout', 'AuthController@logout');
 
-	$app->get('/', 'DashboardController@index');
+	$app->get('/', function() {
+		return view('app');
+	});
 
 	$app->get('servers', 'ServersController@index');
 	$app->post('servers', 'ServersController@store');
@@ -24,4 +26,6 @@ $app->group(['namespace' => 'App\Http\Controllers', 'middleware' => 'auth'], fun
 	$app->delete('servers/{id}/destroy', 'ServersController@destroy');
 	$app->get('servers/{id}/enable', 'ServersController@enable');
 	$app->post('servers/test', 'ServersController@test');
+	
+	$app->get('jobs', 'JobsController@index');
 });
